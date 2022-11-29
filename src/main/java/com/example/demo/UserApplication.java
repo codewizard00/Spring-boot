@@ -42,7 +42,7 @@ public class UserApplication {
     @PostMapping("/encryptionSecond")
     public String EncryptionSecond(@RequestBody String message)throws GeneralSecurityException, UnsupportedEncodingException {
         
-        String key ="fd8fe23dce7b440eb976eeb7c0351ebd";
+        String key ="a8bb453cab0f442e936ed347acb0844d";
         // public static final String ALGORITHM = "AES/CBC/PKCS5Padding";
         Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
         byte[] messageArr = message.getBytes();
@@ -61,7 +61,7 @@ public class UserApplication {
     
     @PostMapping("/decryption")
     public String Decryption(@RequestBody String entity) throws GeneralSecurityException, UnsupportedEncodingException {
-    String key ="a8bb453cab0f442e936ed347acb0844d";
+    String key ="fd8fe23dce7b440eb976eeb7c0351ebd";
     Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
     byte[] keyparam=key.getBytes();
     SecretKeySpec keySpec = new SecretKeySpec(keyparam, "AES");
