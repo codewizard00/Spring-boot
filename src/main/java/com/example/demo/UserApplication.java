@@ -38,10 +38,47 @@ public class UserApplication {
         System.out.println(encryptedBytes);
         return new String(encryptedBytes);
     }
+
+    @PostMapping("/encryptionSecond")
+    public String EncryptionSecond(@RequestBody String message)throws GeneralSecurityException, UnsupportedEncodingException {
+        
+        String key ="fd8fe23dce7b440eb976eeb7c0351ebd";
+        // public static final String ALGORITHM = "AES/CBC/PKCS5Padding";
+        Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
+        byte[] messageArr = message.getBytes();
+        byte[] keyparam=key.getBytes();
+        SecretKeySpec keySpec = new SecretKeySpec(keyparam, "AES");
+        byte[] ivParams = new byte[16];
+        byte[] encoded = new byte[messageArr.length + 16];
+        System.arraycopy(ivParams,0,encoded,0,16);
+        System.arraycopy(messageArr, 0, encoded, 16, messageArr.length);
+        cipher.init(Cipher.ENCRYPT_MODE, keySpec, new IvParameterSpec(ivParams));
+        byte[] encryptedBytes = cipher.doFinal(encoded);
+        encryptedBytes = Base64.getEncoder().encode(encryptedBytes);
+        System.out.println(encryptedBytes);
+        return new String(encryptedBytes);
+    }
     
     @PostMapping("/decryption")
     public String Decryption(@RequestBody String entity) throws GeneralSecurityException, UnsupportedEncodingException {
-    String key ="fd8fe23dce7b440eb976eeb7c0351ebd";
+    String key ="a8bb453cab0f442e936ed347acb0844d";
+    Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
+    byte[] keyparam=key.getBytes();
+    SecretKeySpec keySpec = new SecretKeySpec(keyparam, "AES");
+    byte[] encoded = entity.getBytes();
+    encoded = Base64.getDecoder().decode(encoded);
+    byte[] decodedEncrypted = new byte[encoded.length-16];
+    System.arraycopy(encoded, 16, decodedEncrypted, 0,encoded.length-16);
+    byte[] ivParams = new byte[16];
+    System.arraycopy(encoded,0, ivParams,0, ivParams.length);
+    cipher.init(Cipher.DECRYPT_MODE, keySpec, new IvParameterSpec(ivParams));
+    byte[] decryptedBytes = cipher.doFinal(decodedEncrypted);
+    return new String(decryptedBytes);
+    }
+
+    @PostMapping("/decryptionSecond")
+    public String DecryptionSecond(@RequestBody String entity) throws GeneralSecurityException, UnsupportedEncodingException {
+    String key ="a8bb453cab0f442e936ed347acb0844d";
     Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
     byte[] keyparam=key.getBytes();
     SecretKeySpec keySpec = new SecretKeySpec(keyparam, "AES");
